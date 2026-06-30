@@ -69,7 +69,7 @@ func Test_Create_SaveCampaign(t *testing.T) {
 func Test_Create_ValidateRepositorySave(t *testing.T) {
 	assert := assert.New(t)
 	repositoryMock := new(repositoryMock)
-	repositoryMock.On("Save", mock.Anything).Return(errors.New("error to save"))
+	repositoryMock.On("Save", mock.Anything).Return(errors.New("Error to save"))
 
 	service.Repository = repositoryMock
 	_, err := service.Create(newCampaign)
