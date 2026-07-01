@@ -2,6 +2,7 @@ package campaign
 
 import (
 	"projeto-golang/internal/contract"
+	internalerrors "projeto-golang/internal/internalErrors"
 )
 
 type Service struct {
@@ -14,9 +15,10 @@ func (s *Service) Create(newCampaign contract.NewCampaign) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	// Precisa mascarar o erro
 	err = s.Repository.Save(campaign)
 	if err != nil {
-		return "", err
+		return "", internalerrors.ErrInternal
 	}
 
 	return campaign.ID, nil

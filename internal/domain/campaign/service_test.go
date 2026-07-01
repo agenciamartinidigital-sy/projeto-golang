@@ -8,6 +8,7 @@ import (
 	"github.com/stretchr/testify/mock"
 
 	"projeto-golang/internal/contract"
+	internalerrors "projeto-golang/internal/internalErrors"
 )
 
 type repositoryMock struct {
@@ -74,6 +75,7 @@ func Test_Create_ValidateRepositorySave(t *testing.T) {
 	service.Repository = repositoryMock
 	_, err := service.Create(newCampaign)
 
-	assert.Equal("Error to save", err.Error())
+	assert.ErrorIs(err, internalerrors.ErrInternal)
+	repositoryMock.AssertExpectations(t)
 
 }
