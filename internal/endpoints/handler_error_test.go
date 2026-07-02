@@ -1,6 +1,7 @@
 package endpoints
 
 import (
+	"encoding/json"
 	"errors"
 	"net/http"
 	"net/http/httptest"
@@ -38,4 +39,25 @@ func Test_HandlerErrorDomain(t *testing.T) {
 
 	assert.Equal(http.StatusBadRequest, res.Code)
 	assert.Contains(res.Body.String(), "domain error")
+}
+
+func Test_ObjectAndStatus(t *testing.T) {
+	assert := assert.New(t)
+	type bodyForTest struct {
+		id int
+	}
+	objExprected := bodyForTest{id: 1}
+	endpoint := func(w http.ResponseWriter, r *http.Request) (interface{}, int, error) {
+		return nil, 201, nil
+	}
+	handlerFunc := HandlerError(endpoint)
+	req, _ := http.NewRequest("GET", "/", nil)
+	res := httptest.NewRecorder()
+
+	handlerFunc.ServeHTTP(res, req)
+
+	assert.Equal(http.StatusCreated, res.Code)
+	objReturned := bodyForTest{}
+	json.Unmarshal(res.Body.Bytes(), &objReturned)
+	assert.Equal(objExprected, objReturned)
 }
