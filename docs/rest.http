@@ -5,3 +5,6 @@ POST http://localhost:3000/campaigns
     "content": "chage password",
     "emails": ["teste@teste.com", "teste1@teste.com"]
 }
+
+###
+GET http://localhost:3000/campaigns
