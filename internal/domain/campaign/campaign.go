@@ -19,7 +19,7 @@ type Campaign struct {
 	Name      string    `validate:"min=5,max=24"`
 	CreatedOn time.Time `validate:"required"`
 	Content   string    `validate:"min=5,max=1024"`
-	Contacts  []Contact `validate:"dive"`
+	Contacts  []Contact `validate:"min=1,dive"`
 }
 
 func NewCampaign(name, content string, emails []string) (*Campaign, error) {

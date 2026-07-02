@@ -1,37 +1,48 @@
 package main
 
 import (
-	"fmt"
+	"errors"
 	"net/http"
+	"projeto-golang/internal/contract"
+	"projeto-golang/internal/domain/campaign"
+	"projeto-golang/internal/infrastructure/database"
+	internalerrors "projeto-golang/internal/internalErrors"
 
-	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/render"
 )
 
 func main() {
-	// rotas são endpoints
+	PORT := ":3000"
+
 	r := chi.NewRouter()
-	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		param := r.URL.Query().Get("name")
-		id := r.URL.Query().Get("id")
-		if param != "" {
-			w.Write([]byte(param + " " + id))
-		} else {
-			w.Write([]byte("teste"))
+	r.Use(middleware.RequestID)
+	r.Use(middleware.ClientIPFromRemoteAddr)
+	r.Use(middleware.Logger)
+	r.Use(middleware.Recoverer)
+
+	service := campaign.Service{
+		Repository: &database.CampaignRepository{},
+	}
+	r.Post("/campaigns", func(w http.ResponseWriter, r *http.Request) {
+		var request contract.NewCampaign
+		render.DecodeJSON(r.Body, &request)
+		id, err := service.Create(request)
+
+		if err != nil {
+			if errors.Is(err, internalerrors.ErrInternal) {
+				render.Status(r, 500)
+			} else {
+				render.Status(r, 400)
+			}
+			render.JSON(w, r, map[string]string{"error": err.Error()})
+
+			return
 		}
+		render.Status(r, 201)
+		render.JSON(w, r, map[string]string{"id": id})
 	})
 
-	r.Get("/{productName}/{productId}", func(w http.ResponseWriter, r *http.Request) {
-		param := chi.URLParam(r, "productName")
-		id := chi.URLParam(r, "productId")
-		w.Write([]byte(param + " " + id))
-	})
-	r.Get("/json", func(w http.ResponseWriter, r *http.Request) {
-
-		obj := map[string]string{"message": "sucess"}
-		render.JSON(w, r, obj)
-	})
-
-	fmt.Println("Servidor conectado à Porta :3000")
-	http.ListenAndServe(":3000", r)
+	http.ListenAndServe(PORT, r)
 }
