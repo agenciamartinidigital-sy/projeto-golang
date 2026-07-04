@@ -41,7 +41,29 @@ func Test_NewCampaign_StatusPending(t *testing.T) {
 
 	campaign, _ := NewCampaign(name, content, contacts)
 
-	assert.Equal("Pending", campaign.Status)
+	assert.Equal(Pending, campaign.Status)
+}
+
+func Test_NewCampaign_StatusStarted(t *testing.T) {
+	assert := assert.New(t)
+
+	campaign, _ := NewCampaign(name, content, contacts)
+
+	campaign.Start()
+
+	assert.Equal(Started, campaign.Status)
+}
+
+func Test_NewCampaign_StatusFinished(t *testing.T) {
+	assert := assert.New(t)
+
+	campaign, _ := NewCampaign(name, content, contacts)
+
+	campaign.Start()
+	err := campaign.Finished()
+
+	assert.Nil(err)
+	assert.Equal(Done, campaign.Status)
 }
 
 func Test_NewCampaign_CreatedOnMustBeNow(t *testing.T) {

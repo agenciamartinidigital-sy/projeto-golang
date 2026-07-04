@@ -13,11 +13,11 @@ import (
 func main() {
 	PORT := ":3000"
 
-	r := chi.NewRouter()
-	r.Use(middleware.RequestID)
-	r.Use(middleware.ClientIPFromRemoteAddr)
-	r.Use(middleware.Logger)
-	r.Use(middleware.Recoverer)
+	route := chi.NewRouter()
+	route.Use(middleware.RequestID)
+	route.Use(middleware.ClientIPFromRemoteAddr)
+	route.Use(middleware.Logger)
+	route.Use(middleware.Recoverer)
 
 	campaingService := campaign.ServiceImp{
 		Repository: &database.CampaignRepository{},
@@ -26,8 +26,8 @@ func main() {
 		CampaignService: &campaingService,
 	}
 	// handler.CampaingService = campaingService
-	r.Post("/campaigns", endpoints.HandlerError(handler.CampaignPost))
-	r.Get("/campaigns", endpoints.HandlerError(handler.CampaignGet))
+	route.Post("/campaigns", endpoints.HandlerError(handler.CampaignPost))
+	route.Get("/campaigns", endpoints.HandlerError(handler.CampaignGet))
 
-	http.ListenAndServe(PORT, r)
+	http.ListenAndServe(PORT, route)
 }

@@ -46,7 +46,7 @@ func NewCampaign(name, content string, emails []string) (*Campaign, error) {
 		Content:   content,
 		CreatedOn: time.Now(), // não pode ser nil
 		Contacts:  contacts,
-		Status:    "Pending",
+		Status:    Pending,
 	}
 
 	err := internalerrors.ValidateStruct(campaign)
@@ -54,4 +54,20 @@ func NewCampaign(name, content string, emails []string) (*Campaign, error) {
 		return campaign, nil
 	}
 	return nil, err
+}
+
+func (c *Campaign) Start() error {
+	if c.Status != Pending {
+		return errors.New("Apenas as camapnhas pendentes podem ser iniciadas")
+	}
+	c.Status = Started
+	return nil
+}
+
+func (c *Campaign) Finished() error {
+	if c.Status != Started {
+		return errors.New("Finalizada")
+	}
+	c.Status = Done
+	return nil
 }
