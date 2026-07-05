@@ -58,7 +58,7 @@ func NewCampaign(name, content string, emails []string) (*Campaign, error) {
 
 func (c *Campaign) Start() error {
 	if c.Status != Pending {
-		return errors.New("Apenas as camapnhas pendentes podem ser iniciadas")
+		return errors.New("Apenas as camapanhas pendentes podem ser iniciadas")
 	}
 	c.Status = Started
 	return nil
@@ -66,7 +66,7 @@ func (c *Campaign) Start() error {
 
 func (c *Campaign) Finished() error {
 	if c.Status != Started {
-		return errors.New("Finalizada")
+		return errors.New("Campaign Finalizada")
 	}
 	c.Status = Done
 	return nil
