@@ -1,6 +1,7 @@
 package endpoints
 
 import (
+	"errors"
 	"net/http"
 	"net/http/httptest"
 	"projeto-golang/internal/contract"
@@ -11,7 +12,7 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-func Test_CampaignsGet_Save(t *testing.T) {
+func Test_CampaignsGetByID_ReturnCampaign(t *testing.T) {
 	assert := assert.New(t)
 	campaign := contract.CampaignRespose{
 		ID:      "343",
@@ -24,10 +25,25 @@ func Test_CampaignsGet_Save(t *testing.T) {
 	handler := Handler{CampaignService: service}
 	req, _ := http.NewRequest("GET", "/", nil)
 	rr := httptest.NewRecorder()
+
 	response, status, _ := handler.CampaignGetByID(rr, req)
 
 	assert.Equal(200, status)
 	assert.Equal(campaign.ID, response.(*contract.CampaignRespose).ID)
 	assert.Equal(campaign.Name, response.(*contract.CampaignRespose).Name)
+}
+
+func Test_CampaignsGetByID_ReturnError(t *testing.T) {
+	assert := assert.New(t)
+	service := new(internalmock.CampaignServiceMock)
+	errExpected := errors.New("something wrong")
+	service.On("GetBy", mock.Anything).Return(nil, errExpected)
+	handler := Handler{CampaignService: service}
+	req, _ := http.NewRequest("GET", "/", nil)
+	rr := httptest.NewRecorder()
+
+	_, _, errReturned := handler.CampaignGetByID(rr, req)
+
+	assert.Equal(errExpected.Error(), errReturned.Error())
 
 }
