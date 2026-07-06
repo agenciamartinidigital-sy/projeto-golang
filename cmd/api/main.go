@@ -27,7 +27,7 @@ func main() {
 	}
 	// handler.CampaingService = campaingService
 	route.Post("/campaigns", endpoints.HandlerError(handler.CampaignPost))
-	route.Get("/campaigns/{id}", endpoints.HandlerError(handler.CampaignGetByID())
+	route.Get("/campaigns/{id}", endpoints.HandlerError(handler.CampaignGetByID))
 
 	http.ListenAndServe(PORT, route)
 }

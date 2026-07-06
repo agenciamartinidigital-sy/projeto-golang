@@ -44,11 +44,11 @@ func Test_HandlerErrorDomain(t *testing.T) {
 func Test_ObjectAndStatus(t *testing.T) {
 	assert := assert.New(t)
 	type bodyForTest struct {
-		id int
+		ID int `json:"id"`
 	}
-	objExprected := bodyForTest{id: 1}
+	objExprected := bodyForTest{ID: 1}
 	endpoint := func(w http.ResponseWriter, r *http.Request) (interface{}, int, error) {
-		return nil, 201, nil
+		return objExprected, 201, nil
 	}
 	handlerFunc := HandlerError(endpoint)
 	req, _ := http.NewRequest("GET", "/", nil)
@@ -58,6 +58,7 @@ func Test_ObjectAndStatus(t *testing.T) {
 
 	assert.Equal(http.StatusCreated, res.Code)
 	objReturned := bodyForTest{}
-	json.Unmarshal(res.Body.Bytes(), &objReturned)
+	err := json.Unmarshal(res.Body.Bytes(), &objReturned)
+	assert.NoError(err)
 	assert.Equal(objExprected, objReturned)
 }
