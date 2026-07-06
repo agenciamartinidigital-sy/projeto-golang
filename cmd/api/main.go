@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"net/http"
 	"projeto-golang/internal/domain/campaign"
 	"projeto-golang/internal/endpoints"
@@ -30,6 +31,7 @@ func main() {
 	// handler.CampaingService = campaingService
 	route.Post("/campaigns", endpoints.HandlerError(handler.CampaignPost))
 	route.Get("/campaigns/{id}", endpoints.HandlerError(handler.CampaignGetByID))
+	route.Get("/campaigns/cancel/{id}", endpoints.HandlerError(handler.CampaignCancelPatch))
 
-	http.ListenAndServe(PORT, route)
+	log.Fatal(http.ListenAndServe(PORT, route))
 }
