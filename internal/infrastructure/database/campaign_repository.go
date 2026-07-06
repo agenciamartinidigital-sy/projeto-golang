@@ -7,22 +7,22 @@ import (
 )
 
 type CampaignRepository struct {
-	DB *gorm.DB
+	Db *gorm.DB
 }
 
 func (c *CampaignRepository) Save(campaign *campaign.Campaign) error {
-	tx := c.DB.Create(campaign)
+	tx := c.Db.Create(campaign)
 	return tx.Error
 }
 
 func (c *CampaignRepository) Get() ([]campaign.Campaign, error) {
 	var campaigns []campaign.Campaign
-	tx := c.DB.Find(&campaigns)
+	tx := c.Db.Find(&campaigns)
 	return campaigns, tx.Error
 }
 
 func (c *CampaignRepository) GetBy(id string) (*campaign.Campaign, error) {
 	var campaign campaign.Campaign
-	tx := c.DB.First(&campaign, id)
+	tx := c.Db.First(&campaign, id)
 	return &campaign, tx.Error
 }

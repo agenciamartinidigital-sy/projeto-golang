@@ -22,7 +22,7 @@ func main() {
 	db := database.NewDB()
 
 	campaingService := campaign.ServiceImp{
-		Repository: &database.CampaignRepository{DB: db},
+		Repository: &database.CampaignRepository{Db: db},
 	}
 	handler := endpoints.Handler{
 		CampaignService: &campaingService,

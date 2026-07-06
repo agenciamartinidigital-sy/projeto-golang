@@ -8,23 +8,25 @@ import (
 	"github.com/rs/xid"
 )
 
-type Contact struct {
-	Emails string `validate:"email"`
-}
-
 const (
 	Pending string = "Pending"
 	Started        = "Started"
 	Done           = "Done"
 )
 
+type Contact struct {
+	ID         string `gorm:"size:50"`
+	Emails     string `validate:"email"`
+	CampaignID string
+}
+
 type Campaign struct {
-	ID        string    `validate:"required"`
-	Name      string    `validate:"min=5,max=24"`
+	ID        string    `validate:"required" gorm:"size:50"`
+	Name      string    `validate:"min=5,max=24" gorm:"size:"100"`
 	CreatedOn time.Time `validate:"required"`
-	Content   string    `validate:"min=5,max=1024"`
+	Content   string    `validate:"min=5,max=1024" gorm:"size:1024"`
 	Contacts  []Contact `validate:"min=1,dive"`
-	Status    string
+	Status    string    `gorm:""size:20`
 }
 
 func NewCampaign(name, content string, emails []string) (*Campaign, error) {
@@ -38,6 +40,7 @@ func NewCampaign(name, content string, emails []string) (*Campaign, error) {
 	contacts := make([]Contact, len(emails))
 	for index, email := range emails {
 		contacts[index].Emails = email
+		contacts[index].ID = xid.New().String()
 	}
 
 	campaign := &Campaign{

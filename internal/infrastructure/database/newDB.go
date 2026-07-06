@@ -3,17 +3,19 @@ package database
 import (
 	"projeto-golang/internal/domain/campaign"
 
-	"github.com/go-sql-driver/mysql"
+	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
 func NewDB() *gorm.DB {
-	dsn := "user:luis1407@tcp(127.0.0.1:3306)/email_campaign?charset=utf8mb4&parseTime=True&loc=Local"
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	dsn := "host=localhost user=emailn_dev password=luis1407 dbname=email_campaign port=5432 sslmode=disable"
+
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		panic("fail to connect to database")
+		panic("Something happens wrong")
 	}
 	// Para criar referência de chave estrangeira
 	db.AutoMigrate(&campaign.Campaign{}, &campaign.Contact{})
+
 	return db
 }
