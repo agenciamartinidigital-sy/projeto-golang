@@ -32,7 +32,6 @@ func main() {
 	// handler.CampaingService = campaingService
 	route.Post("/campaigns", endpoints.HandlerError(handler.CampaignPost))
 	route.Get("/campaigns/{id}", endpoints.HandlerError(handler.CampaignGetByID))
-	route.Patch("/campaigns/cancel/{id}", endpoints.HandlerError(handler.CampaignCancelPatch))
 	route.Delete("/campaigns/delete/{id}", endpoints.HandlerError(handler.CampaignDelete))
 
 	fmt.Println("Conexão estabelecida com sucesso")

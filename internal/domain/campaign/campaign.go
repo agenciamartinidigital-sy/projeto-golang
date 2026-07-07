@@ -61,9 +61,14 @@ func NewCampaign(name, content string, emails []string) (*Campaign, error) {
 	return nil, err
 }
 
-func (c *Campaign) Cancel() {
-	c.Status = Canceled
+func (c *Campaign) Create() {
+	c.Status = Started
 }
+
+//
+// func (c *Campaign) Cancel() {
+// 	c.Status = Canceled
+// }
 
 func (c *Campaign) Delete() {
 	c.Status = Done

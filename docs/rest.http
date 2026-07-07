@@ -7,11 +7,7 @@ POST http://localhost:3000/campaigns
 }
 
 ###
-
-GET http://localhost:3000/campaigns/d960sc5lv9v1ktid52f0
+GET http://localhost:3000/campaigns/d96dpidlv9v5movoi5rg
 
 ###
-PATCH http://localhost:3000/campaigns/cancel/d960sc5lv9v1ktid52f0
-
-### 
-DELETE http://localhost:3000/campaigns/delete/d960sc5lv9v1ktid52f0
+DELETE http://localhost:3000/campaigns/delete/d96e62dlv9v7893nsg0g

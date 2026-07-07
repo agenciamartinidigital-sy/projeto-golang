@@ -1,6 +1,7 @@
 package database
 
 import (
+	"errors"
 	"projeto-golang/internal/domain/campaign"
 
 	"gorm.io/gorm"
@@ -24,6 +25,10 @@ func (c *CampaignRepository) Get() ([]campaign.Campaign, error) {
 func (c *CampaignRepository) GetBy(id string) (*campaign.Campaign, error) {
 	var campaign campaign.Campaign
 	tx := c.Db.Preload("Contacts").First(&campaign, "id = ?", id)
+	if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
+		return nil, nil
+	}
+
 	return &campaign, tx.Error
 }
 

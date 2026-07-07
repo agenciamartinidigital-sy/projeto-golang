@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"projeto-golang/internal/contract"
-	internalmock "projeto-golang/internal/test/mock"
+	internalmock "projeto-golang/internal/test/internalMock"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
