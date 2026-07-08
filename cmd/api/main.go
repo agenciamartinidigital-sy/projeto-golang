@@ -20,6 +20,7 @@ func main() {
 	route.Use(middleware.ClientIPFromRemoteAddr)
 	route.Use(middleware.Logger)
 	route.Use(middleware.Recoverer)
+	route.Use(endpoints.Auth)
 
 	db := database.NewDB()
 
