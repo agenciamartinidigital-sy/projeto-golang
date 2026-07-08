@@ -1,11 +1,11 @@
-@base_url = http://127.0.0.1:3000 
+@base_url = http://127.0.0.1:3000
 @auth_url = http://127.0.0.1:8080
 
-### PING 
+### PING
 GET {{base_url}}/ping
 
-### DELETE CAMPAIGN 
-DELETE {{url}}/delete/d976qpdlv9v6kvjcdhk0
+### DELETE CAMPAIGN
+DELETE {{base_url}}/delete/d976qpdlv9v6kvjcdhk0
 
 ### GET_TOKEN
 POST {{auth_url}}/realms/provider/protocol/openid-connect/token
@@ -18,7 +18,7 @@ client_id=emailcampaign&client_secret=suv0pl09TPTD0vYk1hyXyOZoZIeJkKaw&username=
 %}
 
 ### CREATE_CAMPAIGN
-POST {{base_urlrl}}/campaigns
+POST {{base_url}}/campaigns
 Authorization: Bearer {{access_token}}
 Content-Type: application/json
 
