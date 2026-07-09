@@ -7,6 +7,7 @@ import (
 	"projeto-golang/internal/domain/campaign"
 	"projeto-golang/internal/endpoints"
 	"projeto-golang/internal/infrastructure/database"
+	"projeto-golang/internal/infrastructure/database/mail"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -31,21 +32,23 @@ func main() {
 
 	campaingService := campaign.ServiceImp{
 		Repository: &database.CampaignRepository{Db: db},
+		SendMail:   mail.SendEmail,
 	}
 	handler := endpoints.Handler{
 		CampaignService: &campaingService,
 	}
+	r.Get("/ping", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("pong"))
+	})
 	// handler.CampaingService = campaingService
 	// Agrupamento de routes
 	route.Route("/campaigns", func(r chi.Router) {
-		r.Use(endpoints.Auth)
-		route.Get("/ping", func(w http.ResponseWriter, r *http.Request) {
-			w.Write([]byte("pong"))
-		})
 
+		r.Use(endpoints.Auth)
 		r.Post("/", endpoints.HandlerError(handler.CampaignPost))
 		r.Get("/{id}", endpoints.HandlerError(handler.CampaignGetByID))
 		r.Delete("/delete/{id}", endpoints.HandlerError(handler.CampaignDelete))
+		r.Patch("/start/{id}", endpoints.HandlerError(handler.CampaignStart))
 
 	})
 

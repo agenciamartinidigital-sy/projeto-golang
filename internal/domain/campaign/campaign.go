@@ -10,9 +10,11 @@ import (
 
 const (
 	Pending  string = "Pending"
+	Updated         = "Updated"
 	Canceled        = "Canceled"
 	Started         = "Started"
 	Done            = "Done"
+	Fail            = "Fail"
 	Deleted         = "Deleted"
 )
 
@@ -67,10 +69,21 @@ func (c *Campaign) Create() {
 	c.Status = Started
 }
 
-//
-// func (c *Campaign) Cancel() {
-// 	c.Status = Canceled
-// }
+func (c *Campaign) Fail() {
+	c.Status = Fail
+}
+
+func (c *Campaign) Done() {
+	c.Status = Done
+}
+
+func (c *Campaign) Cancel() {
+	c.Status = Canceled
+}
+
+func (c *Campaign) Update() {
+	c.Status = Updated
+}
 
 func (c *Campaign) Delete() {
 	c.Status = Done

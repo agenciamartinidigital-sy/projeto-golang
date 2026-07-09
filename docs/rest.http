@@ -14,9 +14,9 @@ DELETE {{base_url}}/delete/
 Authorization: Bearer {{access_token}}
 
 
-# ###
-# PATCH {{base_url}}/campaigns/cancel
-# Authorization: Bearer {{access_token}}
+###
+PATCH {{base_url}}/campaigns/cancel
+Authorization: Bearer {{access_token}}
 
 
 ### GET_TOKEN
