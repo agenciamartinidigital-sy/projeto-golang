@@ -7,6 +7,7 @@ import (
 	"projeto-golang/internal/domain/campaign"
 	"projeto-golang/internal/endpoints"
 	"projeto-golang/internal/infrastructure/database"
+	"projeto-golang/internal/infrastructure/database/mail"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -20,6 +21,13 @@ func main() {
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
+
+	errMail := mail.SendEmail()
+	if errMail != nil {
+		log.Fatal("Error sending mail", errMail)
+	}
+
+	return
 
 	route := chi.NewRouter()
 	route.Use(middleware.RequestID)
