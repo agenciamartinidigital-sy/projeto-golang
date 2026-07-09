@@ -10,10 +10,16 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/joho/godotenv"
 )
 
 func main() {
 	PORT := ":3000"
+
+	err := godotenv.Load("../../.env")
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 
 	route := chi.NewRouter()
 	route.Use(middleware.RequestID)
@@ -46,7 +52,3 @@ func main() {
 	fmt.Println("Conexão estabelecida com sucesso")
 	log.Fatal(http.ListenAndServe(PORT, route))
 }
-
-/*
-RS256
-*/

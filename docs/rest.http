@@ -1,5 +1,5 @@
-@base_url = http://127.0.0.1:3000
-@auth_url = http://127.0.0.1:8080
+@base_url = http://localhost:3000
+@auth_url = http://localhost:8080
 
 ### PING
 GET {{base_url}}/ping
@@ -14,9 +14,9 @@ DELETE {{base_url}}/delete/
 Authorization: Bearer {{access_token}}
 
 
-###
-PATCH {{base_url}}/campaigns/cancel
-Authorization: Bearer {{access_token}}
+# ###
+# PATCH {{base_url}}/campaigns/cancel
+# Authorization: Bearer {{access_token}}
 
 
 ### GET_TOKEN
@@ -38,7 +38,8 @@ Content-Type: application/json
 {
     "Name": "change",
     "Content": "change password",
-    "emails": ["luis@teste.com", "jo@teste.com"]
+    "emails": ["luis@teste.com", "jo@teste.com"],
+    "createdBy": "luis@teste.com"
 }
 
 ### 

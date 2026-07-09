@@ -9,6 +9,7 @@ require (
 	github.com/go-chi/render v1.0.3
 	github.com/go-playground/validator v9.31.0+incompatible
 	github.com/jaswdr/faker/v2 v2.9.1
+	github.com/joho/godotenv v1.5.1
 	github.com/rs/xid v1.6.0
 	github.com/stretchr/testify v1.11.1
 	gorm.io/driver/postgres v1.6.0
