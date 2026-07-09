@@ -46,3 +46,7 @@ func main() {
 	fmt.Println("Conexão estabelecida com sucesso")
 	log.Fatal(http.ListenAndServe(PORT, route))
 }
+
+/*
+RS256
+*/
