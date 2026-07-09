@@ -162,3 +162,25 @@ func Test_Delete_ReturnNil_Success(t *testing.T) {
 
 	assert.Nil(err)
 }
+
+func Test_Start_RecordNotFound(t *testing.T) {
+	assert := assert.New(t)
+	campaignIDInvalid := "invalid"
+	repositoryMock := new(internalmock.CampaignRepositoryMock)
+	repositoryMock.On("GetBy", mock.Anything).Return(nil, gorm.ErrRecordNotFound)
+	service.Repository = repositoryMock
+
+	err := service.Start(campaignIDInvalid)
+	assert.Equal(err.Error(), gorm.ErrRecordNotFound.Error())
+}
+
+func Test_Start_CampaignPeding(t *testing.T) {
+	assert := assert.New(t)
+	campaign := &campaign.Campaign{ID: "1", Status: campaign.Started}
+	reposistoryMock := new(internalmock.CampaignRepositoryMock)
+	reposistoryMock.On("GetBy", mock.Anything).Return(campaign, nil)
+	service.Repository = reposistoryMock
+
+	err := service.Start(campaign.ID)
+	assert.Equal("Campaign status invalid", err.Error())
+}

@@ -18,7 +18,7 @@ const (
 
 type Contact struct {
 	ID         string `gorm:"size:50"`
-	Emails     string `validate:"email" gorm:"size:100"`
+	Email      string `validate:"email" gorm:"size:100"`
 	CampaignID string `gorm:"size:50"`
 }
 
@@ -42,7 +42,7 @@ func NewCampaign(name, content string, emails []string, createdby string) (*Camp
 
 	contacts := make([]Contact, len(emails))
 	for index, email := range emails {
-		contacts[index].Emails = email
+		contacts[index].Email = email
 		contacts[index].ID = xid.New().String()
 	}
 

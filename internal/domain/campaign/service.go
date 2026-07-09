@@ -97,3 +97,11 @@ func (s *ServiceImp) Delete(id string) error {
 	}
 	return nil
 }
+
+func (s *ServiceImp) Start(id string) error {
+	_, err := s.Repository.GetBy(id)
+	if err != nil {
+		return internalerrors.ProcessErrorToReturn(err)
+	}
+	return nil
+}
