@@ -47,7 +47,7 @@ func (c *CampaignRepository) Delete(campaign *campaign.Campaign) error {
 	return tx.Error
 }
 
-func (c *CampaignRepository) GetCampaignToBeSent() ([]campaign.Campaign, error) {
+func (c *CampaignRepository) GetCampaignsToBeSent() ([]campaign.Campaign, error) {
 	var campaigns []campaign.Campaign
 	tx := c.Db.Preload("Contacts").Find(
 		&campaigns,

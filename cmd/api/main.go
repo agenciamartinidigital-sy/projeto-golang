@@ -37,7 +37,7 @@ func main() {
 	handler := endpoints.Handler{
 		CampaignService: &campaingService,
 	}
-	r.Get("/ping", func(w http.ResponseWriter, r *http.Request) {
+	route.Get("/ping", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("pong"))
 	})
 	// handler.CampaingService = campaingService

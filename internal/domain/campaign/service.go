@@ -99,38 +99,41 @@ func (s *ServiceImp) Delete(id string) error {
 	return nil
 }
 
-func (s *ServiceImp) SaveEmailAndUpdatedStatus(campaignSaved *Campaign) {
+func (s *ServiceImp) SaveEmailAndUpdatedStatus(campaignSaved *Campaign) error {
 	err := s.SendMail(campaignSaved)
 	if err != nil {
 		campaignSaved.Fail()
 	} else {
 		campaignSaved.Done()
 	}
-	s.Repository.Update(campaignSaved)
+	if updateErr := s.Repository.Update(campaignSaved); updateErr != nil {
+		return updateErr
+	}
+	return err
 }
 
 func (s *ServiceImp) Start(id string) error {
-	campaignSaved, err := s.getAndValidateStatusIsPending(id)
+	campaignSaved, err := s.GetAndValidateStatusIsPending(id)
 	if err != nil {
 		return err
 	}
 
-	go s.SaveEmailAndUpdatedStatus(campaignSaved)
-	err = s.Repository.Update(campaignSaved)
+	err = s.SaveEmailAndUpdatedStatus(campaignSaved)
+
 	if err != nil {
 		return internalerrors.ErrInternal
 	}
 	return nil
 }
 
-func (s *ServiceImp) getAndValidateStatusIsPending(id string) (*Campaign, error) {
+func (s *ServiceImp) GetAndValidateStatusIsPending(id string) (*Campaign, error) {
 	campaign, err := s.Repository.GetBy(id)
 
 	if err != nil {
 		return nil, internalerrors.ProcessErrorToReturn(err)
 	}
 	if campaign.Status != Pending {
-		return nil, errors.New("campaign status invalid")
+		return nil, errors.New("Campaign status invalid")
 	}
 	return campaign, nil
 }
