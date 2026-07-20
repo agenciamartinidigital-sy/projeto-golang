@@ -25,13 +25,14 @@ type Contact struct {
 }
 
 type Campaign struct {
-	ID        string    `validate:"required" gorm:"size:50"`
-	Name      string    `validate:"min=5,max=24" gorm:"size:100"`
-	CreatedOn time.Time `validate:"required"`
-	Content   string    `validate:"min=5,max=1024" gorm:"size:1024"`
-	Contacts  []Contact `validate:"min=1,dive"`
-	Status    string    `gorm:"size:20"`
-	Createdby string    `validate:"email" gorm:"size:50"`
+	ID        string    `json:"id" validate:"required" gorm:"size:50;not null"`
+	Name      string    `json:"name" validate:"min=5,max=24" gorm:"size:100;not null"`
+	CreatedOn time.Time `json:"createdOn" validate:"required" gorm:"not null"`
+	UpdatedOn time.Time `json:"updatedOn"`
+	Content   string    `json:"content" validate:"min=5,max=1024" gorm:"size:1024;not null"`
+	Contacts  []Contact `json:"contacts" validate:"min=1,dive"`
+	Status    string    `json:"status" gorm:"size:20;not null"`
+	CreatedBy string    `json:"createdBy" validate:"email" gorm:"size:50;not null"`
 }
 
 func NewCampaign(name, content string, emails []string, createdby string) (*Campaign, error) {
@@ -52,10 +53,10 @@ func NewCampaign(name, content string, emails []string, createdby string) (*Camp
 		ID:        xid.New().String(),
 		Name:      name,
 		Content:   content,
-		CreatedOn: time.Now(), // não pode ser nil
+		CreatedOn: time.Now(),
 		Contacts:  contacts,
 		Status:    Pending,
-		Createdby: createdby,
+		CreatedBy: createdby,
 	}
 
 	err := internalerrors.ValidateStruct(campaign)

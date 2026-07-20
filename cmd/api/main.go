@@ -15,7 +15,7 @@ import (
 )
 
 func main() {
-	PORT := ":3000"
+	PORT := ":5000"
 
 	err := godotenv.Load("../../.env")
 	if err != nil {

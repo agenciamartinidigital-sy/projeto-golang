@@ -1,6 +1,5 @@
-@base_url = http://localhost:3000
+@base_url = http://localhost:5000
 @auth_url = http://localhost:8080
-@campaign_id = {{campaign_create.response.body.id}}
 
 ### GET_TOKEN 
 # @name token 
@@ -12,6 +11,7 @@ client_id=emailcampaign&client_secret=suv0pl09TPTD0vYk1hyXyOZoZIeJkKaw&username=
     client.global.set("access_token", response.body.access_token);
 %}
 
+
 ### CREATE_CAMPAIGN 
 # @name campaign_create
 POST {{base_url}}/campaigns/
@@ -19,28 +19,31 @@ Authorization: Bearer {{access_token}}
 Content-Type: application/json 
 
 {
-    "Name": "change",
-    "Content": "change password",
+    "Name": "Hello World",
+    "Content": "Hello World content",
     "emails": ["luis@teste.com", "jo@teste.com", "adele@teste.com", "agenciamartinidigital@gmail.com"],
     "createdBy": "luis@teste.com"
 }
 > {%
-    client.global.set("campaign_id", response.body.id);
+    if (response.body && response.body.id) {
+        client.global.set("camp_id", response.body.id);
+    } else {
+        client.log("CREATE_CAMPAIGN falhou. Status: " + response.status + " Body: " + JSON.stringify(response.body));
+    }
 %}
-
 
 ### PING 
 GET {{base_url}}/ping 
 
 ### GET
-GET {{base_url}}/campaigns/{{campaign_id}}
+GET {{base_url}}/campaigns/{{camp_id}}
 Authorization: Bearer {{access_token}}
 
-### DELETE_CAMPAIGN 
-DELETE {{base_url}}/campaigns/delete/{{campaign_id}}
+### DELETE_CAMPAIGN
+DELETE {{base_url}}/campaigns/delete/{{camp_id}}
 Authorization: Bearer {{access_token}}
 
-### 
-PATCH {{base_url}}/campaigns/start/{{campaign_id}}
+###
+PATCH {{base_url}}/campaigns/start/{{camp_id}}
 Authorization: Bearer {{access_token}}
 

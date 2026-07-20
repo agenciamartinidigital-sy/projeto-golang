@@ -44,12 +44,12 @@ func (s *ServiceImp) GetBy(id string) (*contract.CampaignRespose, error) {
 		return nil, nil
 	}
 	return &contract.CampaignRespose{
-		ID:                campaign.ID,
-		Name:              campaign.Name,
-		Content:           campaign.Content,
-		Status:            campaign.Status,
-		AmoutEmailsToSend: len(campaign.Contacts),
-		CreatedBy:         campaign.Createdby,
+		ID:                 campaign.ID,
+		Name:               campaign.Name,
+		Content:            campaign.Content,
+		Status:             campaign.Status,
+		AmountEmailsToSend: len(campaign.Contacts),
+		CreatedBy:          campaign.CreatedBy,
 	}, nil
 }
 
@@ -118,8 +118,17 @@ func (s *ServiceImp) Start(id string) error {
 		return err
 	}
 
-	err = s.SaveEmailAndUpdatedStatus(campaignSaved)
+	go func() {
+		_ = s.SendMail(campaignSaved)
+	}()
 
+	// err = s.SendMail(campaignSaved)
+	// if err != nil {
+	// 	return internalerrors.ErrInternal
+	// }
+
+	campaignSaved.Done()
+	err = s.Repository.Update(campaignSaved)
 	if err != nil {
 		return internalerrors.ErrInternal
 	}
