@@ -27,7 +27,7 @@ func Test_NewCampaign_CreateCampaign(t *testing.T) {
 	assert.Equal(campaign.Name, name)
 	assert.Equal(campaign.Content, content)
 	assert.Equal(len(campaign.Contacts), len(contacts))
-	assert.Equal(createdby, campaign.Createdby)
+	assert.Equal(createdby, campaign.CreatedBy)
 }
 
 func Test_NewCampaign_IDIsNotNil(t *testing.T) {

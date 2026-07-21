@@ -67,8 +67,7 @@ func Test_Create_Campaign(t *testing.T) {
 func Test_Create_ValidateDomaininError(t *testing.T) {
 	setup()
 	assert := assert.New(t)
-	// newCampaign.Name = "" -> nunca criar dependência de teste
-	// _, err := service.Create(newCampaign)
+
 	_, err := service.Create(contract.NewCampaign{})
 
 	assert.False(errors.Is(err, internalerrors.ErrInternal))
@@ -115,7 +114,7 @@ func Test_GetByID_ReturnCampaign(t *testing.T) {
 	assert.Equal(campaignPending.Name, campaignReturned.Name)
 	assert.Equal(campaignPending.Content, campaignReturned.Content)
 	assert.Equal(campaignPending.Status, campaignReturned.Status)
-	assert.Equal(campaignPending.Createdby, campaignReturned.CreatedBy)
+	assert.Equal(campaignPending.CreatedBy, campaignReturned.CreatedBy)
 }
 
 func Test_GetByID_ReturnError(t *testing.T) {
@@ -202,10 +201,8 @@ func Test_Start_CampaignPeding(t *testing.T) {
 
 func Test_Start_ShouldSendMail(t *testing.T) {
 	setup()
-	assert := assert.New(t)
-
-	repositoryMock.On("GetBy", mock.Anything).Return(campaignPending, nil)
-	repositoryMock.On("Update", mock.Anything).Return(nil)
+	setupUpdateRepository()
+	setupGetByRepositoryBy(campaignPending)
 	sentMail := false
 	sendMail := func(campaign *campaign.Campaign) error {
 		if campaign.ID == campaignPending.ID {
@@ -217,7 +214,7 @@ func Test_Start_ShouldSendMail(t *testing.T) {
 	service.SendMail = sendMail
 
 	service.Start(campaignPending.ID)
-	assert.True(sentMail)
+	assert.True(t, sentMail)
 }
 
 func Test_Start_ReturnError_SendEmail(t *testing.T) {
@@ -239,7 +236,8 @@ func Test_Start_ReturnError_SendEmail(t *testing.T) {
 
 func Test_Start_ReturnNewDone(t *testing.T) {
 	setup()
-	assert := assert.New(t)
+	setupSendEmailWithSucess()
+	setupGetByRepositoryBy(campaignPending)
 
 	repositoryMock.On("GetBy", mock.Anything).Return(campaignPending, nil)
 	repositoryMock.On("Update", mock.MatchedBy(func(campaignToUpdate *campaign.Campaign) bool {
@@ -253,5 +251,5 @@ func Test_Start_ReturnNewDone(t *testing.T) {
 
 	service.Start(campaignPending.ID)
 
-	assert.Equal(campaign.Done, campaignPending.Status)
+	assert.Equal(t, campaign.Done, campaignPending.Status)
 }

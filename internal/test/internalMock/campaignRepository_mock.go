@@ -42,5 +42,5 @@ func (r *CampaignRepositoryMock) GetCampaignsToBeSent() ([]campaign.Campaign, er
 	if args.Get(0) == nil {
 		return nil, args.Error(1)
 	}
-	return args.Get(0).([]campaign.Campaign), args.Error(1)
+	return args.Get(0).([]campaign.Campaign), nil
 }
