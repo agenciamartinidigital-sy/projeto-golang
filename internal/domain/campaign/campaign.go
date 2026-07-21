@@ -90,7 +90,7 @@ func (c *Campaign) Delete() {
 	c.Status = Done
 }
 
-func (c *Campaign) Start() error {
+func (c *Campaign) Started() error {
 	if c.Status != Pending {
 		return errors.New("Apenas as camapanhas pendentes podem ser iniciadas")
 	}
