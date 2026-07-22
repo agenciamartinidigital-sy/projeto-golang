@@ -181,22 +181,22 @@ func Test_Delete_ReturnNil_Success(t *testing.T) {
 
 func Test_Start_RecordNotFound(t *testing.T) {
 	setup()
-	assert := assert.New(t)
-
+	setupGetByRepositoryBy(campaignPending)
 	repositoryMock.On("GetBy", mock.Anything).Return(nil, gorm.ErrRecordNotFound)
 
 	err := service.Start("invalid_campaign")
-	assert.Equal(err.Error(), gorm.ErrRecordNotFound.Error())
+	assert.Equal(t, err.Error(), gorm.ErrRecordNotFound.Error())
 }
 
 func Test_Start_CampaignPeding(t *testing.T) {
 	setup()
-	assert := assert.New(t)
+	setupUpdateRepository()
+	setupGetByRepositoryBy(campaignPending)
 
 	repositoryMock.On("GetBy", mock.Anything).Return(campaignStarted, nil)
 
 	err := service.Start(campaignStarted.ID)
-	assert.Equal("Campaign status invalid", err.Error())
+	assert.Equal(t, "Campaign status invalid", err.Error())
 }
 
 func Test_Start_ShouldSendMail(t *testing.T) {
@@ -219,10 +219,8 @@ func Test_Start_ShouldSendMail(t *testing.T) {
 
 func Test_Start_ReturnError_SendEmail(t *testing.T) {
 	setup()
-	assert := assert.New(t)
-
-	repositoryMock.On("GetBy", mock.Anything).Return(campaignPending, nil)
-	repositoryMock.On("Update", mock.Anything).Return(nil)
+	setupGetByRepositoryBy(campaignPending)
+	setupUpdateRepository()
 
 	sendMail := func(campaign *campaign.Campaign) error {
 		return errors.New("error to send mail")
@@ -231,7 +229,7 @@ func Test_Start_ReturnError_SendEmail(t *testing.T) {
 
 	err := service.Start(campaignPending.ID)
 
-	assert.Equal(internalerrors.ErrInternal.Error(), err.Error())
+	assert.Equal(t, internalerrors.ErrInternal.Error(), err.Error())
 }
 
 func Test_Start_ReturnNewDone(t *testing.T) {
